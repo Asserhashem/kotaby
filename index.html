@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كتابي - منصة نشر الكتب الرقمية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background-color: #0b0f19; color: #ffffff; overflow-x: hidden; scroll-behavior: smooth; }
+        .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: linear-gradient(125deg, #0b0f19, #111827, #1f2937); background-size: 400% 400%; animation: gradientBG 15s ease infinite; }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; position: fixed; width: 100%; top: 0; background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .logo { font-size: 26px; font-weight: 900; color: #f59e0b; letter-spacing: 1px; }
+        nav a { color: #d1d5db; text-decoration: none; margin-left: 25px; font-weight: 600; transition: 0.3s; }
+        nav a:hover { color: #f59e0b; }
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        .hero h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 20px; background: linear-gradient(to right, #ffffff, #9ca3af); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 1.25rem; color: #9ca3af; max-width: 600px; margin-bottom: 30px; }
+        .btn-main { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; padding: 14px 35px; border-radius: 50px; font-weight: 700; font-size: 1.1rem; border: none; cursor: pointer; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3); transition: 0.3s ease; text-decoration: none; }
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(245, 158, 11, 0.5); }
+        .books-section { padding: 100px 8%; text-align: center; }
+        .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 50px; color: #f3f4f6; }
+        .book-grid { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        .book-card { background: rgba(31, 41, 55, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; width: 320px; padding: 25px; backdrop-filter: blur(10px); transition: 0.4s; text-align: right; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .book-card:hover { transform: translateY(-10px); border-color: #f59e0b; }
+        .book-card img { width: 100%; height: 400px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; }
+        .book-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; color: #ffffff; }
+        .book-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px; }
+        .book-price { font-size: 1.3rem; font-weight: 800; color: #f59e0b; }
+        .btn-buy { background: #2563eb; color: white; padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .btn-buy:hover { background: #1d4ed8; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: #1f2937; padding: 30px 40px; border-radius: 20px; width: 90%; max-width: 480px; text-align: right; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; max-height: 90vh; overflow-y: auto; }
+        .modal-content h3 { margin-bottom: 15px; font-size: 1.5rem; color: #f59e0b; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: #d1d5db; }
+        .form-group input, .form-group select { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #4b5563; background: #111827; color: white; font-size: 0.95rem; }
+        .close-modal { position: absolute; top: 15px; left: 15px; background: none; border: none; color: #9ca3af; font-size: 1.5rem; cursor: pointer; }
+        .vodafone-box { background: #374151; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 0.9rem; color: #e5e7eb; border-right: 4px solid #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <header>
+        <div class="logo">كتابي - Kotaby</div>
+        <nav>
+            <a href="#hero">الرئيسية</a>
+            <a href="#books">الكتب المميزة</a>
+            <a href="/admin-dashboard" target="_blank" style="color: #f59e0b;">لوحة التحكم ⚙️</a>
+        </nav>
+    </header>
+
+    <section class="hero" id="hero">
+        <h1>منصتك الأولى لنشر وقراءة الكتب</h1>
+        <p>اكتشف عوالم جديدة، أو انشر مؤلفاتك الخاصة بكل حرية واحترافية.</p>
+        <a href="#books" class="btn-main">استكشف الكتب الآن</a>
+    </section>
+
+    <section class="books-section" id="books">
+        <h2 class="section-title">أحدث الإصدارات</h2>
+        <div class="book-grid">
+            <div class="book-card">
+                <img src="book.jpg" alt="خلف جدار العادية" onerror="this.style.border='2px solid red'">
+                <div class="book-title">خلف جدار العادية</div>
+                <div style="color: #9ca3af; font-size: 0.95rem; margin-bottom: 10px;">المؤلف: آسر هاشم</div>
+                <div class="book-footer">
+                    <div class="book-price">100 جنيه</div>
+                    <button class="btn-buy" onclick="openCheckout()">شراء الكتاب</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeCheckout()">&times;</button>
+            <h3>إتمام طلب الشراء</h3>
+            
+            <div class="form-group">
+                <label>أنت مقيم في:</label>
+                <select id="userLocation" onchange="togglePaymentMethod()">
+                    <option value="egypt">مصر (Vodafone Cash / Instapay)</option>
+                    <option value="abroad">خارج مصر (Instapay)</option>
+                </select>
+            </div>
+
+            <div id="egyptPaymentBox" class="vodafone-box">
+                💳 حول مبلغ <strong>100 جنيه</strong>عبر فودافون كاش على الرقم:<br>
+                <span style="color: #f59e0b; font-size: 1.1rem; font-weight: bold;">01040423418</span>
+                <br>أو فودافون كاش عبر الرقم
+                <br><span style="color: #f59e0b; font-size: 1.1rem; font-weight: bold;">01212141070</span>
+
+            </div>
+
+            <div id="abroadPaymentBox" class="vodafone-box" style="display: none; border-right-color: #2563eb;">
+              الدفع متاح عبر Instapay عبرالرقم (قيمة الكتاب: 5$ دولار).
+                <span style="color: #f59e0b; font-size: 1.1rem; font-weight: bold;">01212141070</span>
+
+            </div>
+
+            <form id="paymentForm" onsubmit="submitOrder(event)">
+                <div class="form-group">
+                    <label>الاسم بالكامل</label>
+                    <input type="text" id="buyerName" required placeholder="أدخل اسمك الكريم">
+                </div>
+                <div class="form-group">
+                    <label>البريد الإلكتروني (لاستلام الكتاب عليه)</label>
+                    <input type="email" id="buyerEmail" required placeholder="example@gmail.com">
+                </div>
+                <div id="phoneGroup" class="form-group">
+                    <label>الرقم المحول منه </label>
+                    <input type="text" id="buyerPhone" placeholder="مثال: 01012345678">
+                </div>
+                <div class="form-group">
+                    <label>لديك برومو كود؟ (اختياري)</label>
+                    <input type="text" id="promoCode" >
+                </div>
+                <button type="submit" class="btn-main" style="width: 100%; text-align: center;">تأكيد الطلب</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openCheckout() { document.getElementById('checkoutModal').style.display = 'flex'; }
+        function closeCheckout() { document.getElementById('checkoutModal').style.display = 'none'; }
+
+        function togglePaymentMethod() {
+            const location = document.getElementById('userLocation').value;
+            const egyptBox = document.getElementById('egyptPaymentBox');
+            const abroadBox = document.getElementById('abroadPaymentBox');
+            const paymentLabel = document.getElementById('paymentLabel');
+            const buyerPhoneInput = document.getElementById('buyerPhone');
+
+            if (location === 'egypt') {
+                egyptBox.style.display = 'block';
+                abroadBox.style.display = 'none';
+                paymentLabel.textContent = 'رقم هاتف فودافون كاش المحول منه';
+                buyerPhoneInput.placeholder = 'مثال: 01040423418';
+                buyerPhoneInput.required = true;
+            } else {
+                egyptBox.style.display = 'none';
+                abroadBox.style.display = 'block';
+                paymentLabel.textContent = 'رقم الحساب أو البريد الإلكتروني المحول منه';
+                buyerPhoneInput.placeholder = 'مثال: user@wise.com أو رقم الحساب';
+                buyerPhoneInput.required = true;
+            }
+        }
+
+        async function submitOrder(event) {
+            event.preventDefault();
+            const buyerName = document.getElementById('buyerName').value;
+            const buyerEmail = document.getElementById('buyerEmail').value;
+            const buyerPhone = document.getElementById('buyerPhone').value; // هيتبعت هنا سواء رقم فودافون أو حساب Wise
+            const userLocation = document.getElementById('userLocation').value;
+            const promoCode = document.getElementById('promoCode').value;
+
+            try {
+                const response = await fetch('/api/buy', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ buyerName, buyerEmail, buyerPhone, userLocation, promoCode })
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    if (result.autoApproved) {
+                        alert(`🎉 مبروك يا بطل! تم تفعيل البرومو كود بنجاح واستلام نسختك.`);
+                    } else {
+                        alert(`تم إرسال طلبك بنجاح! رقم طلبك هو: ${result.orderId}\nسيتم مراجعة التحويل وإرسال رابط التحميل قريباً.`);
+                    }
+                    closeCheckout();
+                    document.getElementById('paymentForm').reset();
+                } else {
+                    alert(result.message || 'حدث خطأ ما.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('تعذر الاتصال بالسيرفر.');
+            }
+        }
+    </script>
+</body>
+</html>
