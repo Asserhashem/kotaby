@@ -6,8 +6,17 @@ const fs = require('fs');
 const nodemailer = require('nodemailer');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const nodemailer = require('nodemailer');
 
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'asserhashem82@gmail.com',
+        pass: 'utzc mojs sxxg beou'
+    }
+});
+const PORT = process.env.PORT || 3000;
+app.use(express.static(__dirname));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname)); // بيسمح للسيرفر يعرض الصور وملفات الـ CSS المجاورة فوراً
