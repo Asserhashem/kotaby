@@ -6,7 +6,6 @@ const fs = require('fs');
 const nodemailer = require('nodemailer');
 
 const app = express();
-const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
