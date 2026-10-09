@@ -3,10 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
-const nodemailer = require('nodemailer');
-
+const mailer  = require('nodemailer');
 const app = express();
-
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
