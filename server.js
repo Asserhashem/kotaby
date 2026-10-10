@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
-const mailer  = require('nodemailer');
+const nodemailer = require('nodemailer');
 const app = express();
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -12,11 +12,11 @@ const transporter = nodemailer.createTransport({
         pass: 'utzc mojs sxxg beou'
     }
 });
+
 const PORT = process.env.PORT || 3000;
 app.use(express.static(__dirname));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static(__dirname)); // بيسمح للسيرفر يعرض الصور وملفات الـ CSS المجاورة فوراً
 let orders = [];
 
 // قاعدة بيانات البرومو كود
@@ -62,18 +62,10 @@ app.post('/api/buy', async (req, res) => {
 
     if (isPromoValid) {
         try {
-            let testAccount = await nodemailer.createTestAccount();
-            let transporter = nodemailer.createTransport({
-                host: "smtp.ethereal.email",
-                port: 587,
-                secure: false,
-                auth: { user: testAccount.user, pass: testAccount.pass },
-            });
+            let downloadLink = `${req.protocol}://${req.get('host')}/download/${newOrder.id}`;
 
-            let downloadLink = `http://localhost:3000/download/${newOrder.id}`;
-
-            let info = await transporter.sendMail({
-                from: '"منصة كتابي" <noreply@kotaby.com>',
+            await transporter.sendMail({
+                from: '"منصة كتابي" <asserhashem82@gmail.com>',
                 to: newOrder.buyerEmail,
                 subject: 'هدية خاصة! نسختك المجانية من كتاب "خلف جدار العادية"',
                 html: `
@@ -86,7 +78,6 @@ app.post('/api/buy', async (req, res) => {
                 `,
             });
             console.log("🎁 تم تفعيل البرومو وإرسال الكتاب أوتوماتيك لـ: %s", newOrder.buyerEmail);
-            console.log("🔗 رابط معاينة إيميل البرومو: %s", nodemailer.getTestMessageUrl(info));
         } catch (err) {
             console.error("خطأ في إرسال إيميل البرومو:", err);
         }
@@ -95,11 +86,10 @@ app.post('/api/buy', async (req, res) => {
     res.json({ success: true, orderId: newOrder.id, autoApproved: isPromoValid });
 });
 
-// صفحة تسجيل الدخول للوحة التحكم (لو مش عامل Login، يظهر له نموذج كتابة الباسورد)
+// صفحة تسجيل الدخول للوحة التحكم
 app.get('/admin-dashboard', (req, res) => {
     const passwordQuery = req.query.password;
 
-    // التحقق من الباسورد القادم من ملف .env الخفي
     if (passwordQuery !== process.env.ADMIN_PASSWORD) {
         return res.send(`
             <html lang="ar" dir="rtl">
@@ -117,7 +107,6 @@ app.get('/admin-dashboard', (req, res) => {
         `);
     }
 
-    // لو الباسورد صح، تظهر لوحة التحكم كاملة
     let promoStatus = promoCodesDB['NasserVIP26'].used 
         ? '<span style="color: #ef4444;">مستخدم ❌ (غير صالح)</span>' 
         : '<span style="color: #10b981;">متاح للاستخدام ✅</span>';
@@ -235,18 +224,10 @@ app.post('/admin/approve/:id', async (req, res) => {
         order.status = 'approved';
 
         try {
-            let testAccount = await nodemailer.createTestAccount();
-            let transporter = nodemailer.createTransport({
-                host: "smtp.ethereal.email",
-                port: 587,
-                secure: false,
-                auth: { user: testAccount.user, pass: testAccount.pass },
-            });
+            let downloadLink = `${req.protocol}://${req.get('host')}/download/${order.id}`;
 
-            let downloadLink = `http://localhost:3000/download/${order.id}`;
-
-            let info = await transporter.sendMail({
-                from: '"منصة كتابي" <noreply@kotaby.com>',
+            await transporter.sendMail({
+                from: '"منصة كتابي" <asserhashem82@gmail.com>',
                 to: order.buyerEmail,
                 subject: 'تهانينا! تم تأكيد طلبك - تحميل كتاب "خلف جدار العادية"',
                 html: `
@@ -258,7 +239,6 @@ app.post('/admin/approve/:id', async (req, res) => {
                 `,
             });
             console.log("✉️ تم الموافقة وإرسال الإيميل بنجاح إلى: %s", order.buyerEmail);
-            console.log("🔗 رابط معاينة الإيميل: %s", nodemailer.getTestMessageUrl(info));
         } catch (error) {
             console.error("خطأ في الإرسال:", error);
         }
