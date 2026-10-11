@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
 const app = express();
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -214,7 +215,7 @@ app.post('/admin/reset-promo', (req, res) => {
     res.redirect(`/admin-dashboard?password=${process.env.ADMIN_PASSWORD}`);
 });
 
-// الموافقة
+// الموافقة وإرسال الكتاب للعميل
 app.post('/admin/approve/:id', async (req, res) => {
     if (req.query.password !== process.env.ADMIN_PASSWORD) return res.status(403).send('غير مسموح.');
     const orderId = parseInt(req.params.id);
